@@ -14,7 +14,6 @@ export class MagicLoginStrategy extends PassportStrategy(Strategy) {
       },
       callbackUrl: process.env.MAGIC_CALLBACK_URL,
       sendMagicLink: async (destination, href) => {
-        console.log('sendMagicLink', destination, href);
         // TODO: send email
         this.logger.debug(
           `Sending magic link to ${destination} with link ${href}`,
