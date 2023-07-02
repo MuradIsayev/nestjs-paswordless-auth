@@ -29,6 +29,6 @@ export class AuthController {
   @UseGuards(AuthGuard('magiclogin'))
   @Get('login/callback')
   callback(@Req() req) {
-    return req.user;
+    return this.authService.generateTokens(req.user);
   }
 }
