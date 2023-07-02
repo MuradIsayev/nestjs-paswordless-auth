@@ -1,19 +1,34 @@
-import { Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { MagicLoginStrategy } from './magiclogin.strategy';
+import { PasswordlessLoginDto } from './passwordless-login.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private strategy: MagicLoginStrategy,
+  ) {}
 
   @Post('login')
-  async login() {
-    // TODO: send magic link
+  login(@Req() req, @Res() res, @Body() body: PasswordlessLoginDto) {
+    this.authService.validateUser(body.destination);
+
+    return this.strategy.send(req, res);
   }
 
-  @Post('login/callback')
-  callback() {
-    // TODO: generate JWT access token
+  @UseGuards(AuthGuard('magiclogin'))
+  @Get('login/callback')
+  callback(@Req() req) {
+    return req.user;
   }
-
-
 }
