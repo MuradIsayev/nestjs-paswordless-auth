@@ -1,7 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
-class Users {
+export class Users {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
@@ -11,5 +11,3 @@ class Users {
   @Column({ length: 256 })
   email: string;
 }
-
-export default Users;
