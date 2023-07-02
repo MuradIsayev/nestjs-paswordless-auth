@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Users } from './entities/user.entity';
@@ -12,10 +12,14 @@ export class UsersService {
     private usersRepository: Repository<Users>,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
-    const user = this.usersRepository.create(createUserDto);
+  async create(createUserDto: CreateUserDto) {
+    const user = await this.findOneByEmail(createUserDto.email);
 
-    return this.usersRepository.save(user);
+    if (user) {
+      throw new BadRequestException('User already exists');
+    }
+
+    return this.usersRepository.save(createUserDto);
   }
 
   findAll() {
@@ -23,9 +27,7 @@ export class UsersService {
   }
 
   async findOneByEmail(email: string) {
-    const user = this.usersRepository.findOneBy({ email });
-
-    return user;
+    return await this.usersRepository.findOneBy({ email });
   }
 
   findOne(id: number) {
