@@ -6,6 +6,7 @@ import { MagicLoginStrategy } from './magiclogin.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
@@ -22,6 +23,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, MagicLoginStrategy],
+  providers: [AuthService, MagicLoginStrategy, JwtStrategy],
 })
 export class AuthModule {}
